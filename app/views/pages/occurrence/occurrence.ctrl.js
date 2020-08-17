@@ -686,6 +686,20 @@ function occurrenceCtrl($scope, $state, $window, hotkeys, enums, OccurrenceFilte
         filter: OccurrenceFilter
     };
 
+    // ternary "all, yes, no" aka optional boolean
+    vm.filters.occurrenceStatus = {
+      titleTranslation: 'filterNames.occurrenceStatus',
+      descriptionTranslation: 'filters.occurrenceStatus.description',
+      queryKey: 'occurrence_status',
+      filter: OccurrenceFilter,
+      options: {
+        yes: 'present',
+        no: 'absent'
+      },
+      optionTranslation: 'filters.occurrenceStatus.options',
+      warnWhenNotSet: true
+  };
+
     // dates
     vm.filters.lastInterpreted = {
         titleTranslation: 'filterNames.lastInterpreted',
