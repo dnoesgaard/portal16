@@ -2,7 +2,7 @@
     <a href="" class="inherit" ng-click="vm.filterConfig.expanded = !vm.filterConfig.expanded">
         <h4>
             <span translate="{{vm.filterConfig.titleTranslation}}">Translation missing</span>
-            <span ng-if="!vm.query && vm.filterConfig.warnWhenNotSet" style="background: tomato; color: white; border-radius: 2px; width: 20px; display: inline-block; text-align: center; ">!</span>
+            <span ng-if="!vm.query && vm.filterConfig.warnWhenNotSet && vm.showWarning" style="background: tomato; color: white; border-radius: 2px; width: 20px; display: inline-block; text-align: center; ">!</span>
             <span class="gb-icon-angle-down pull-right" ng-if="!vm.filterConfig.expanded"></span>
             <span class="gb-icon-angle-up pull-right" ng-if="vm.filterConfig.expanded"></span>
         </h4>

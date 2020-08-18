@@ -24,9 +24,10 @@ function filterTernaryCustomDirective(BUILD_VERSION) {
     return directive;
 
     /** @ngInject */
-    function filterTernaryCustom() {
+    function filterTernaryCustom($scope) {
         var vm = this;
         vm.queryKey = vm.filterConfig.queryKey;
+        vm.showWarning = false;
 
         vm.change = function() {
             vm.apply();
@@ -44,6 +45,20 @@ function filterTernaryCustomDirective(BUILD_VERSION) {
                 vm.apply();
             }
         }
+
+        function setWarningFlag() {
+          vm.filterConfig.showWarning(function(response) {
+            vm.showWarning = response;
+          }, function(err) {
+            vm.showWarning = false;
+          });
+        }
+
+        $scope.$watchCollection(function() {
+          return vm.filterState.query;
+      }, function() {
+          setWarningFlag();
+      });
 
         updateQuery(vm.filterState.query[vm.queryKey]);
     }
