@@ -10,6 +10,8 @@ module.exports = function(app) {
 };
 
 router.get('/tools/observation-trends', function(req, res, next) {
+       // Allow this widget in iframes
+  res.removeHeader('X-Frame-Options');
     try {
         res.render('pages/tools/observationTrends/observationTrends', {
             _meta: {
@@ -24,6 +26,8 @@ router.get('/tools/observation-trends', function(req, res, next) {
 });
 
 router.get('/embed/observation-trends', function(req, res, next) {
+    // Allow this widget in iframes
+  res.removeHeader('X-Frame-Options');
     try {
         res.render('pages/tools/observationTrends/observationTrendsEmbed', {
             _meta: {

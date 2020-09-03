@@ -12,6 +12,7 @@ let URLSearchParams = require('url').URLSearchParams;
 let linkTools = require('./links/links');
 let defaultLanguage = require('../../config/config').defaultLocale;
 let localeConfig = require('../../config/locales');
+let getLocaleFromUrl = require('../middleware/i18n/localeFromQuery').getLocaleFromUrl;
 
 let defaultAllowedTags = [
     'h3',
@@ -71,6 +72,14 @@ function date(date, locale, format) {
         day = moment(date, dateFormats).locale(locale);
     }
     return day.format(format);
+}
+
+function utcOffset(dateString) {
+    console.log(dateString);
+    if (!dateString || dateString.length !== 22) {
+        return '';
+    }
+    return dateString.substring(16, 22);
 }
 
 function getSlug(str) {
@@ -223,7 +232,9 @@ function prefixLinkUrl(str, urlPrefix) {
         str = str.replace(/^http(s)?:\/\/www\.gbif((-dev)|(-uat))?\.org/, '');
     }
     if (!isUrl(str) && _.startsWith(str, '/')) {
-        str = urlPrefix + '/' + str.replace(/^\//, '');
+        let relativeLinkLocale = getLocaleFromUrl(str, localeConfig.locales);
+        let prefix = relativeLinkLocale ? '' : urlPrefix;
+        str = prefix + '/' + str.replace(/^\//, '');
     }
     return str;
 }
@@ -379,6 +390,7 @@ function sanitizeArrayField(array, field) {
 
 module.exports = {
     date: date,
+    utcOffset: utcOffset,
     prettifyEnum: prettifyEnum,
     formatBytes: formatBytes,
     prettifyLicense: prettifyLicense,

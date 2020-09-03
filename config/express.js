@@ -1,4 +1,5 @@
 let express = require('express'),
+    helmet = require('helmet'),
     glob = require('glob'),
     passport = require('passport'),
 // favicon = require('serve-favicon'),
@@ -15,6 +16,49 @@ module.exports = function(app, config) {
     app.locals.ENV = env;
     app.locals.ENV_DEVELOPMENT = env == 'dev';
 
+    // based on https://github.com/OWASP/CheatSheetSeries/issues/376 helmet disables browsers' buggy cross-site scripting filter
+
+    app.use(helmet({
+        referrerPolicy: false,
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: [
+                    `'self'`,
+                    `*.gbif.org`,
+                    `*.${config.topDomain}`,
+                    '*.google-analytics.com',
+                    'fonts.gstatic.com',
+                    'images.ctfassets.net',
+                    'data:',
+                    'api.mapbox.com',
+                    '*.tiles.mapbox.com',
+                    'player.vimeo.com',
+                    'eepurl.com',
+                    'gbif.us18.list-manage.com',
+                    'zenodo.org'],
+                scriptSrc: [
+                    `'self'`,
+                    `'unsafe-inline'`,
+                    `'unsafe-eval'`,
+                    '*.google-analytics.com',
+                    'api.mapbox.com'],
+                styleSrc: [
+                    `'self'`,
+                    `'unsafe-inline'`,
+                    '*.googleapis.com',
+                    'api.mapbox.com'],
+                workerSrc: [
+                    'blob:'
+                ],
+                upgradeInsecureRequests: []
+              }
+
+      },
+      hsts: {
+        maxAge: 600,
+        includeSubDomains: true
+      }
+}));
     /**
      * add middleware to add ip address to request.
      */
